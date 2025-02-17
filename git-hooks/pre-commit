@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Colors for output
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+NC="\033[0m" # No color
+
+# Collect staged JavaScript/TypeScript files
+all_js_files=$(git diff --cached --diff-filter=d --name-only | grep -E '\.(js|jsx|ts|tsx)$')
+
+if [ -z "$all_js_files" ]; then
+    echo "${GREEN}✔ No JavaScript/TypeScript files to lint${NC}"
+    exit 0
+fi
+
+# Run ESLint on staged files
+./node_modules/.bin/eslint $all_js_files --quiet --fix
+eslint_exit_code=$?
+
+# Add auto-fixed files back to the staging area
+git add $all_js_files
+
+# Check ESLint exit code
+if [ $eslint_exit_code -ne 0 ]; then
+    echo "${RED}❌ ESLint errors detected. Commit aborted.${NC}"
+    exit 1
+else
+    echo "${GREEN}✔ ESLint passed. Proceeding with commit.${NC}"
+    exit 0
+fi
