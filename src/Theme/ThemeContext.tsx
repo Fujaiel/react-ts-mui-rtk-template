@@ -9,9 +9,10 @@ interface ThemeContextType {
 }
 
 // Create the context with a default undefined value
-export const ThemeContext = createContext<ThemeContextType | undefined>(
-  undefined
-);
+export const ThemeContext = createContext<ThemeContextType>({
+  themeMode: 'light',
+  toggleTheme: () => {},
+});
 
 // Define the available themes
 const themes: Record<string, typeof lightTheme> = {
@@ -25,12 +26,9 @@ interface ThemeProviderWrapperProps {
   children: ReactNode;
 }
 
-const ThemeProviderWrapper: React.FC<ThemeProviderWrapperProps> = ({
-  children,
-}) => {
+const ThemeProviderWrapper: React.FC<ThemeProviderWrapperProps> = ({ children }) => {
   // Get the saved theme from localStorage or default to "light"
-  const storedTheme =
-    (localStorage.getItem('appTheme') as keyof typeof themes) || 'light';
+  const storedTheme = (localStorage.getItem('appTheme') as keyof typeof themes) || 'light';
   const [themeMode, setThemeMode] = useState<string>(storedTheme);
   const [theme, setTheme] = useState(themes[storedTheme] || lightTheme);
 
