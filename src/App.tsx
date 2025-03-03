@@ -1,15 +1,13 @@
 import React from 'react';
 import { CssBaseline, Button, Box, Typography } from '@mui/material';
 
-import { ThemeContext } from './Theme/ThemeContext';
+import ThemeProviderWrapper, { ThemeContext } from './Theme/ThemeContext';
 import { useContext } from 'react';
 
 const App: React.FC = () => {
   const themeContext = useContext(ThemeContext);
   if (!themeContext) {
-    throw new Error(
-      'ThemeContext is undefined, make sure ThemeProviderWrapper is used'
-    );
+    throw new Error('ThemeContext is undefined, make sure ThemeProviderWrapper is used');
   }
 
   const { themeMode, toggleTheme } = themeContext;
@@ -17,41 +15,43 @@ const App: React.FC = () => {
 
   return (
     <>
-      <CssBaseline />
-      <Box sx={{ textAlign: 'center', mt: 4, p: 2 }}>
-        <Typography variant="h1" sx={{ mb: 2 }}>
-          Custom MUI Theme Example
-        </Typography>
-        <Button
-          onClick={() => toggleTheme('light')}
-          variant="contained"
-          color="primary"
-          sx={{ borderRadius: 8, textTransform: 'none' }}
-        >
-          Light Theme
-        </Button>
-        <Button
-          onClick={() => toggleTheme('dark')}
-          variant="contained"
-          color="secondary"
-          sx={{ ml: 2, borderRadius: 8, textTransform: 'none' }}
-        >
-          Dark Theme
-        </Button>
-        <Button
-          onClick={() => toggleTheme('purple')}
-          variant="contained"
-          sx={{
-            ml: 2,
-            bgcolor: 'secondary.main',
-            borderRadius: 12,
-            textTransform: 'uppercase',
-            '&:hover': { bgcolor: 'primary.dark' },
-          }}
-        >
-          Purple Theme
-        </Button>
-      </Box>
+      <ThemeProviderWrapper>
+        <CssBaseline />
+        <Box sx={{ textAlign: 'center', mt: 4, p: 2 }}>
+          <Typography variant="h1" sx={{ mb: 2 }}>
+            Custom MUI Theme Example
+          </Typography>
+          <Button
+            onClick={() => toggleTheme('light')}
+            variant="contained"
+            color="primary"
+            sx={{ borderRadius: 8, textTransform: 'none' }}
+          >
+            Light Theme
+          </Button>
+          <Button
+            onClick={() => toggleTheme('dark')}
+            variant="contained"
+            color="secondary"
+            sx={{ ml: 2, borderRadius: 8, textTransform: 'none' }}
+          >
+            Dark Theme
+          </Button>
+          <Button
+            onClick={() => toggleTheme('purple')}
+            variant="contained"
+            sx={{
+              ml: 2,
+              bgcolor: 'secondary.main',
+              borderRadius: 12,
+              textTransform: 'uppercase',
+              '&:hover': { bgcolor: 'primary.dark' },
+            }}
+          >
+            Purple Theme
+          </Button>
+        </Box>
+      </ThemeProviderWrapper>
     </>
   );
 };
